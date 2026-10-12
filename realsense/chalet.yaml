@@ -3,7 +3,7 @@ version: "1.0"
 externalDependencies:
   realsense:
     repository: https://github.com/IntelRealSense/librealsense
-    commit: "e15c5d6bb156"
+    commit: "c84fe6438bd1"
     kind: git
     # tag: v2.58.3
 
