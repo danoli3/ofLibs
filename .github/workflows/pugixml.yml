@@ -6,6 +6,16 @@ on:
     paths:
       - pugixml/**
       - .github/workflows/pugixml.yml
+  pull_request:
+    paths:
+      - pugixml/**
+      - .github/workflows/pugixml.yml
+      - .github/workflows/_build.yml
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   ci:

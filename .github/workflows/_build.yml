@@ -273,6 +273,8 @@ jobs:
           if-no-files-found: error
 
       - name: Publish Release
+        # PR runs only build + upload the artifact; fork PRs get a read-only token.
+        if: github.event_name != 'pull_request'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
