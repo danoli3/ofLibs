@@ -154,6 +154,10 @@ jobs:
           echo "ANDROID_PLATFORM=android-21" >> "$GITHUB_ENV"
           echo "ANDROID_NDK_ROOT=${android_ndk_root}" >> "$GITHUB_ENV"
           echo "ANDROID_NDK_HOME=${android_ndk_root}" >> "$GITHUB_ENV"
+          # Per-ABI marker for chalet `defines[env:...]` conditions, which only test presence.
+          if [ "${ANDROID_ABI}" = "x86" ]; then
+            echo "ANDROID_ABI_X86=1" >> "$GITHUB_ENV"
+          fi
 
       # - name: Verify emsdk
       #   if: matrix.platform == 'emscripten'

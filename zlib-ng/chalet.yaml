@@ -49,6 +49,11 @@ targets:
       - WITH_NATIVE_INSTRUCTIONS=OFF
       - WITH_GZFILEOP=ON
       - ENABLE_VISIBILITY=OFF
+    # NDK 23 (clang 12) only declares _mm_cvtsi64_si128 on x86_64, and zlib-ng's
+    # 32-bit polyfill (arch/x86/x86_intrins.h) skips clang, so crc32_chorba_sse2.c
+    # fails on i686. Drop the SSE Chorba fallback there; braid/PCLMULQDQ remain.
+    defines[env:ANDROID_ABI_X86]:
+      - CMAKE_C_FLAGS=-DWITHOUT_CHORBA_SSE
     defines[platform:macos]:
       - CMAKE_OSX_ARCHITECTURES=arm64;x86_64
       - CMAKE_OSX_DEPLOYMENT_TARGET=11.0

@@ -94,6 +94,9 @@ targets:
       - ENABLE_DATA_MYSQL=OFF
       - CMAKE_C_FLAGS_RELEASE=-g0 -O3
       - CMAKE_CXX_FLAGS_RELEASE=-g0 -O3
+      # Poco builds as C++20, where libc++ drops std::allocator<T>::size_type;
+      # Net/src/SMTPChannel.cpp still uses it.
+      - CMAKE_CXX_FLAGS=-D_LIBCPP_ENABLE_CXX20_REMOVED_ALLOCATOR_MEMBERS
     # defines[platform:macos]:
     # - CMAKE_OSX_ARCHITECTURES=x86_64;arm64
     # - CMAKE_OSX_DEPLOYMENT_TARGET=11.0
