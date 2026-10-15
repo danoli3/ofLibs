@@ -150,6 +150,16 @@ targets:
       - WITH_VTK=OFF
       - WITH_ITT=OFF
       - WITH_CAROTENE=OFF
+      # OpenCV's Android install layout is sdk/native/{jni/include,staticlibs/<abi>,...};
+      # use the same lib/include/share layout as linux64 so the bundler finds it.
+      - OPENCV_BIN_INSTALL_PATH=bin
+      - OPENCV_LIB_INSTALL_PATH=lib
+      - OPENCV_LIB_ARCHIVE_INSTALL_PATH=lib
+      - OPENCV_3P_LIB_INSTALL_PATH=lib/opencv5/3rdparty
+      - OPENCV_CONFIG_INSTALL_PATH=lib/cmake/opencv5
+      - OPENCV_INCLUDE_INSTALL_PATH=include/opencv5
+      - OPENCV_OTHER_INSTALL_PATH=share/opencv5
+      - OPENCV_LICENSES_INSTALL_PATH=share/licenses/opencv5
 
     defines[platform:macos]:
       - APPLE_FRAMEWORK=ON
