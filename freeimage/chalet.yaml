@@ -48,6 +48,12 @@ targets:
       - BUILD_OPENEXR=ON
       - BUILD_LIBRAWLITE=ON
 
+    # Emscripten's toolchain restricts find_library() to its sysroot, so
+    # ZLIB_ROOT alone is ignored there; point FindZLIB at zlib-ng directly.
+    defines[platform:web]:
+      - ZLIB_INCLUDE_DIR=${cwd}/${externalBuild:zlib-ng-external}/ext.zlib-ng/install/include
+      - ZLIB_LIBRARY=${cwd}/${externalBuild:zlib-ng-external}/ext.zlib-ng/install/lib/libz.a
+
     # JPEG-XR is Windows-only (CMake default is ON for WIN32 only).
     defines[platform:windows]:
       - BUILD_JXR=ON
@@ -56,8 +62,11 @@ targets:
       - CMAKE_TOOLCHAIN_FILE=${env:ANDROID_NDK_ROOT}/build/cmake/android.toolchain.cmake
       - CMAKE_ANDROID_ARCH_ABI=${env:ANDROID_ABI}
       - ANDROID_ABI=${env:ANDROID_ABI}
-      - ANDROID_API=${env:ANDROID_API}
-      - ANDROID_PLATFORM=${env:ANDROID_PLATFORM}
+      # LibRaw's libraw.h sets _FILE_OFFSET_BITS=64 for __linux__ (true on Android);
+      # 32-bit bionic hides ftello() under that below API 24, breaking libc++
+      # <fstream>. apothecary builds FreeImage at API 25+ for the same reason.
+      - ANDROID_API=24
+      - ANDROID_PLATFORM=android-24
       - ANDROID_TOOLCHAIN=clang
       - ANDROID_NDK=${env:ANDROID_NDK_ROOT}
       - ANDROID_NDK_ROOT=${env:ANDROID_NDK_ROOT}
