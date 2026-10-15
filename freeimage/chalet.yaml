@@ -1,11 +1,11 @@
 name: ofLibs freeimage
-version: "3.19.20"
+version: "3.19.23"
 
 externalDependencies:
   freeimage:
     repository: https://github.com/danoli3/FreeImage
-    # tag: 3.19.20 (same version as the apothecary FreeImage formula)
-    commit: "d1302b686cc4"
+    # tag: 3.19.23
+    commit: "cc2bfc1b67d3"
     kind: git
 
 targets:
@@ -47,6 +47,10 @@ targets:
       - BUILD_WEBP=ON
       - BUILD_OPENEXR=ON
       - BUILD_LIBRAWLITE=ON
+      # 3.19.23 optional backends that link *system* libjxl/libheif; keep the
+      # prebuilt archives self-contained.
+      - BUILD_LIBJXL=OFF
+      - BUILD_LIBHEIF=OFF
 
     # Emscripten's toolchain restricts find_library() to its sysroot, so
     # ZLIB_ROOT alone is ignored there; point FindZLIB at zlib-ng directly.
@@ -64,7 +68,7 @@ targets:
       - ANDROID_ABI=${env:ANDROID_ABI}
       # LibRaw's libraw.h sets _FILE_OFFSET_BITS=64 for __linux__ (true on Android);
       # 32-bit bionic hides ftello() under that below API 24, breaking libc++
-      # <fstream>. apothecary builds FreeImage at API 25+ for the same reason.
+      # <fstream>. (apothecary's Android default is API 25+, so it never hits this.)
       - ANDROID_API=24
       - ANDROID_PLATFORM=android-24
       - ANDROID_TOOLCHAIN=clang
