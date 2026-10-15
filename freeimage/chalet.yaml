@@ -1,0 +1,79 @@
+name: ofLibs freeimage
+version: "3.19.20"
+
+externalDependencies:
+  freeimage:
+    repository: https://github.com/danoli3/FreeImage
+    # tag: 3.19.20 (same version as the apothecary FreeImage formula)
+    commit: "d1302b686cc4"
+    kind: git
+
+targets:
+  zlib-ng-external:
+    kind: chaletProject
+    location: ../zlib-ng
+
+  freeimage:
+    kind: cmakeProject
+    location: ${external:${name}}
+    recheck: false
+    rebuild: false
+    install: true
+
+    defines:
+      - BUILD_SHARED_LIBS=OFF
+      - CMAKE_BUILD_TYPE=Release
+      - CMAKE_POSITION_INDEPENDENT_CODE=ON
+      - CMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded
+      - CMAKE_INSTALL_PREFIX=install
+      - CMAKE_INSTALL_LIBDIR=lib
+      - CMAKE_INSTALL_INCLUDEDIR=include
+      # OpenEXR (bundled) needs C++17.
+      - CMAKE_CXX_STANDARD=17
+      - BUILD_TESTS=OFF
+
+      # zlib comes from ofLibs zlib-ng (ZLIB_COMPAT), so FreeImage and oF core
+      # share one zlib instead of linking two copies of the same symbols.
+      - BUILD_ZLIB=ON
+      - USE_SYSTEM_ZLIB=ON
+      - ZLIB_ROOT=${cwd}/${externalBuild:zlib-ng-external}/ext.zlib-ng/install
+
+      # Everything else is the bundled copy in FreeImage/Source, matching the
+      # apothecary formula: PNG, JPEG, TIFF, OpenJPEG, WebP, OpenEXR, LibRaw.
+      - BUILD_LIBPNG=ON
+      - BUILD_LIBJPEG=ON
+      - BUILD_LIBTIFF=ON
+      - BUILD_LIBOPENJPEG=ON
+      - BUILD_WEBP=ON
+      - BUILD_OPENEXR=ON
+      - BUILD_LIBRAWLITE=ON
+
+    # JPEG-XR is Windows-only (CMake default is ON for WIN32 only).
+    defines[platform:windows]:
+      - BUILD_JXR=ON
+
+    defines[env:ANDROID_ABI]:
+      - CMAKE_TOOLCHAIN_FILE=${env:ANDROID_NDK_ROOT}/build/cmake/android.toolchain.cmake
+      - CMAKE_ANDROID_ARCH_ABI=${env:ANDROID_ABI}
+      - ANDROID_ABI=${env:ANDROID_ABI}
+      - ANDROID_API=${env:ANDROID_API}
+      - ANDROID_PLATFORM=${env:ANDROID_PLATFORM}
+      - ANDROID_TOOLCHAIN=clang
+      - ANDROID_NDK=${env:ANDROID_NDK_ROOT}
+      - ANDROID_NDK_ROOT=${env:ANDROID_NDK_ROOT}
+      - ANDROID_STL=c++_static
+
+    defines[platform:macos]:
+      - CMAKE_OSX_DEPLOYMENT_TARGET=11.0
+      - CMAKE_OSX_ARCHITECTURES=x86_64;arm64
+
+distribution:
+  freeimage:
+    kind: archive
+    format: zip
+    include:
+      - ${external:${name}}/license-fi.txt
+      - ${external:${name}}/license-gplv2.txt
+      - ${external:${name}}/license-gplv3.txt
+      - ${externalBuild:${name}}/install/include
+      - ${externalBuild:${name}}/install/lib

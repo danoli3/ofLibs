@@ -12,12 +12,13 @@ toolchain. Supported ABIs are `arm64-v8a`, `armeabi-v7a`, `x86`, and
 `x86_64`; release archives are named `android-arm64`, `android-armv7`,
 `android-x86`, and `android-x86_64` respectively.
 
-Android-enabled recipes currently include Assimp, Brotli, fmt, FreeType, GLM,
+Android-enabled recipes currently include Assimp, Brotli, fmt, FreeImage, FreeType, GLM,
 nlohmann/json, OpenCV, Poco, pugixml, tess2, uriparser, utfcpp, and zlib-ng.
 An Android checkmark in the tables means all four ABIs above.
 
 
 ## ofCore
+[![freeimage](https://github.com/ofWorks/ofLibs/actions/workflows/freeimage.yml/badge.svg )](https://github.com/ofWorks/ofLibs/actions/workflows/freeimage.yml )
 [![freetype](https://github.com/ofWorks/ofLibs/actions/workflows/freetype.yml/badge.svg )](https://github.com/ofWorks/ofLibs/actions/workflows/freetype.yml )
 [![glew](https://github.com/ofWorks/ofLibs/actions/workflows/glew.yml/badge.svg )](https://github.com/ofWorks/ofLibs/actions/workflows/glew.yml )
 [![glfw](https://github.com/ofWorks/ofLibs/actions/workflows/glfw.yml/badge.svg )](https://github.com/ofWorks/ofLibs/actions/workflows/glfw.yml )
@@ -77,6 +78,7 @@ FreeImage have some issues. Poco now builds again and it was moved to "Additiona
 
 | Library | vs | macos | linux64 | rpi-aarch64 | rpi-armv6l | Android |
 |---------|:--:|:-----:|:-------:|:-----------:|:----------:|:-------:|
+| freeimage | ✓ | ✓ | ✓ | ✓ | — | ✓ |
 | freetype | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 | glew | ✓ | ✓ | ✓ | ✓ | ✓ | — |
 | glfw | ✓ | ✓ | ✓ | ✓ | ✓ | — |
